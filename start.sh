@@ -1,12 +1,19 @@
 #!/bin/bash
 
-echo "Activating Python venv..."
-source /app/venv/bin/activate
-
+# Start FastAPI
 echo "Starting FastAPI..."
-cd ai-logic
-uvicorn main:app --host 0.0.0.0 --port 8000 &
+/app/venv/bin/uvicorn main:app --host 0.0.0.0 --port 8000 &
+FASTAPI_PID=$!
 
+# Start Node
 echo "Starting Node server..."
-cd ../server
-node Server.js
+cd /app/server
+node Server.js &
+NODE_PID=$!   
+
+# Wait for any process to exit
+wait -n
+
+# If one crashes → stop both
+echo "One service stopped. Shutting down..."
+kill -TERM $FASTAPI_PID $NODE_PID 

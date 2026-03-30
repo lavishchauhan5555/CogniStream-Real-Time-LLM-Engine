@@ -1,43 +1,49 @@
-# Use Node with newer Debian (comes with Python 3.11+ support)
-FROM node:18-bullseye
+# -----------------------------
+# Base Image (Node + Debian Bookworm → Python 3.11)
+# -----------------------------
+FROM node:18-bookworm
 
-# Install Python 3.11 manually
-RUN apt-get update && apt-get install -y python3 python3-pip python3-venv
+# Install Python 3.11 + venv
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    python3-venv \
+    && rm -rf /var/lib/apt/lists/*
 
-# Set working dir
+# -----------------------------
+# App Setup
+# -----------------------------
 WORKDIR /app
-
-# Copy all files
 COPY . .
 
 # -----------------------------
-# Node backend
+# Node Backend
 # -----------------------------
 WORKDIR /app/server
 RUN npm install
 
 # -----------------------------
-# Python FastAPI setup
+# FastAPI (Python)
 # -----------------------------
 WORKDIR /app/ai-logic
 
-# Create virtual env
+# Create virtual environment
 RUN python3 -m venv /app/venv
 
-# Upgrade pip (IMPORTANT)
+# Upgrade pip
 RUN /app/venv/bin/pip install --upgrade pip
 
-# Install requirements
+# Install Python dependencies
 RUN /app/venv/bin/pip install --no-cache-dir -r requirements.txt
 
 # -----------------------------
-# React frontend build
+# React Frontend
 # -----------------------------
 WORKDIR /app/client
 RUN npm install && npm run build
 
 # -----------------------------
-# Start script
+# Start Script
 # -----------------------------
 WORKDIR /app
 RUN chmod +x start.sh
