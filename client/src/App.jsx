@@ -5,7 +5,7 @@ import './App.css'
 function App() {
 
   const sendMessage = async () => {
-    const res = await fetch("http://localhost:10000/api/chat", {
+    const res = await fetch("https://cognistream-real-time-llm-engine.onrender.com/api/chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
