@@ -1,7 +1,16 @@
 from fastapi import FastAPI
+from pydantic import BaseModel
 
 app = FastAPI()
 
-@app.get("/")
-def read_root():
-    return {"message": "Hello FastAPI 🚀"}
+class ChatRequest(BaseModel):
+    message: str
+
+@app.post("/chat")
+async def chat(req: ChatRequest):
+    user_msg = req.message
+
+    # dummy AI response (later replace with LLM)
+    return {
+        "reply": f"You said: {user_msg}"
+    }
