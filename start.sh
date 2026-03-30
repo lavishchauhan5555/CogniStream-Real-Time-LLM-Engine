@@ -2,6 +2,7 @@
 
 # Start FastAPI
 echo "Starting FastAPI..."
+cd /app/ai-logic
 /app/venv/bin/uvicorn main:app --host 0.0.0.0 --port 8000 &
 FASTAPI_PID=$!
 
