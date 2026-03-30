@@ -8,7 +8,7 @@ FASTAPI_PID=$!
 # Start Node
 echo "Starting Node server..."
 cd /app/server
-node Server.js &
+node server.js &
 NODE_PID=$!   
 
 # Wait for any process to exit
