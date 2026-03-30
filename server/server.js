@@ -13,13 +13,7 @@ app.use(express.json());
 
 const __dirname = new URL('.', import.meta.url).pathname;
 
-// Serve static files
-app.use(express.static(path.join(__dirname, "../client/dist")));
 
-// Catch all routes → React app
-app.use((req, res) => {
-  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
-});
 
 
 
@@ -46,6 +40,14 @@ app.post("/api/chat", async (req, res) => {
 });
 
 
+
+// Serve static files
+app.use(express.static(path.join(__dirname, "../client/dist")));
+
+// Catch all routes → React app
+app.use((req, res) => {
+  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
+});
 
 const port = process.env.PORT || 10000
 
