@@ -1,48 +1,47 @@
-# Base image
+# Use Node with newer Debian (comes with Python 3.11+ support)
 FROM node:18-bullseye
 
-# Install Python + venv
-RUN apt-get update && apt-get install -y python3 python3-venv python3-pip
+# Install Python 3.11 manually
+RUN apt-get update && apt-get install -y python3 python3-pip python3-venv
 
 # Set working dir
 WORKDIR /app
 
-# Copy everything
+# Copy all files
 COPY . .
 
 # -----------------------------
-# 📦 Install Node Backend
+# Node backend
 # -----------------------------
 WORKDIR /app/server
 RUN npm install
 
 # -----------------------------
-# 🤖 Setup Python (FastAPI)
+# Python FastAPI setup
 # -----------------------------
 WORKDIR /app/ai-logic
 
-# Create virtual environment
+# Create virtual env
 RUN python3 -m venv /app/venv
 
-# Install Python dependencies inside venv
+# Upgrade pip (IMPORTANT)
+RUN /app/venv/bin/pip install --upgrade pip
+
+# Install requirements
 RUN /app/venv/bin/pip install --no-cache-dir -r requirements.txt
 
 # -----------------------------
-# 🎨 Build React Frontend
+# React frontend build
 # -----------------------------
 WORKDIR /app/client
 RUN npm install && npm run build
 
 # -----------------------------
-# 🚀 Final Setup
+# Start script
 # -----------------------------
 WORKDIR /app
-
-# Make start script executable
 RUN chmod +x start.sh
 
-# Expose port (Render uses this)
 EXPOSE 10000
 
-# Start app
 CMD ["./start.sh"]
