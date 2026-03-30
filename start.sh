@@ -1,9 +1,12 @@
 #!/bin/bash
 
-# Start FastAPI in background
+echo "Activating Python venv..."
+source /app/venv/bin/activate
+
+echo "Starting FastAPI..."
 cd ai-logic
 uvicorn main:app --host 0.0.0.0 --port 8000 &
 
-# Start Node server
+echo "Starting Node server..."
 cd ../server
-node index.js
+node Server.js
