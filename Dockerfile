@@ -1,9 +1,9 @@
 # -----------------------------
-# Base Image (Node + Debian Bookworm → Python 3.11)
+# Base Image (Node 20 + Python 3.11)
 # -----------------------------
-FROM node:18-bookworm
+FROM node:20-bookworm
 
-# Install Python 3.11 + venv
+# Install Python
 RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
@@ -27,20 +27,16 @@ RUN npm install
 # -----------------------------
 WORKDIR /app/ai-logic
 
-# Create virtual environment
 RUN python3 -m venv /app/venv
-
-# Upgrade pip
 RUN /app/venv/bin/pip install --upgrade pip
-
-# Install Python dependencies
 RUN /app/venv/bin/pip install --no-cache-dir -r requirements.txt
 
 # -----------------------------
-# React Frontend
+# React Frontend (Vite)
 # -----------------------------
 WORKDIR /app/client
-RUN npm install && npm run build
+RUN npm install
+RUN npm run build
 
 # -----------------------------
 # Start Script
